@@ -1,13 +1,27 @@
 from typing import Optional
 from datetime import datetime, timezone
 from sqlmodel import SQLModel, Field
+from enum import Enum
+
+class PrioridadeEnum(str, Enum):
+    baixa = "baixa"
+    media = "media"
+    alta = "alta"
+    critica = "critica"
+
+class StatusEnum(str, Enum):
+    aberto = "aberto"
+    em_andamento = "em_andamento"
+    pendente = "pendente"
+    resolvido = "resolvido"
+    fechado = "fechado"
 
 class TicketBase(SQLModel):
     titulo: str
     descricao: str
     solicitante: str
-    proioridade: str = "media"
-    status: str = "aberto"
+    proioridade: PrioridadeEnum = PrioridadeEnum.media
+    status: str = StatusEnum.aberto
     responsavel: Optional[str] = None
 
 class Ticket(TicketBase, table=True):
@@ -27,6 +41,6 @@ class TicketUpdate(SQLModel):
     titulo: Optional[str] = None
     descricao: Optional[str] = None
     solicitante: Optional[str] = None
-    prioridade: Optional[str] = None
-    status: Optional[str] = None
+    prioridade: Optional[PrioridadeEnum] = None
+    status: Optional[StatusEnum] = None
     responsavel: Optional[str] = None

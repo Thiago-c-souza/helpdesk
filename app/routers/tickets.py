@@ -62,3 +62,12 @@ def atualizar_tickets(ticket_id: int, payload: TicketUpdate, session: Session = 
     session.commit()
     session.refresh(ticket)
     return ticket
+
+@rota.delete("/{ticket_id}", status_code=204)
+def deletar_tickets(ticket_id: int, session: Session = Depends(get_session)):
+    ticket = session.get(Ticket, ticket_id)
+    if not ticket:
+        raise HTTPException(404, "Ticket não encontrado.")
+    session.delete(ticket)
+    session.commit()
+    return
